@@ -252,12 +252,12 @@ void parserLine(robot& x, const string &s) {
     }
 }
 
-int main() {
-    /* (hear 1022 -30 passto(23,24))(see 1022 ((ball) 20 -20 1 -2) ((player hfut1 2) 23 45 0.5 1 22 40) ((goal r) 12 20) ((Line r) 10 -30))) */
-    string s = "(hear 1022 -30 passto(23,24))(see 1022 ((ball) 20 -20 1 -2) ((player hfut1 2) 23 45 0.5 1 22 40) ((goal r) 12 20) ((Line r) 10 -30)))";
-    robot x;
-    parserLine(x, s);
-    x.outMessage();
-//    cout << "\n" << "see 1022 ((ball) 20 -20 1 -2) ((player hfut1 2) 23 45 0.5 1 22 40 ) ((goal r) 12 20) ((Line r) -30))";
-    return 0;
-}
+//int main() {
+//    /* (hear 1022 -30 passto(23,24))(see 1022 ((ball) 20 -20 1 -2) ((player hfut1 2) 23 45 0.5 1 22 40) ((goal r) 12 20) ((Line r) 10 -30))) */
+//    string s = "(hear 1022 -30 passto(23,24))(see 1022 ((ball) 20 -20 1 -2) ((player hfut1 2) 23 45 0.5 1 22 40) ((goal r) 12 20) ((Line r) 10 -30)))";
+//    robot x;
+//    parserLine(x, s);
+//    x.outMessage();
+//    //    cout << "\n" << "see 1022 ((ball) 20 -20 1 -2) ((player hfut1 2) 23 45 0.5 1 22 40 ) ((goal r) 12 20) ((Line r) -30))";
+//    return 0;
+//}
