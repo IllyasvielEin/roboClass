@@ -6,6 +6,7 @@
 #include <iostream>
 #include <utility>
 #include <vector>
+#include <cmath>
 using namespace std;
 
 class point {
@@ -18,6 +19,14 @@ public:
 
     point& operator=(const point& p1) = default;
 
+    point& operator+(const point& p1);
+
+    point& operator-(const point& p1);
+
+    point& operator*(double q);
+
+
+
     point() = default;
 
     point(double _x, double _y) : x(_x), y(_y) {}
@@ -28,19 +37,43 @@ public:
 
     void setPoint(double _x, double _y);
 
-    double getX() const;
+    inline double X() const {
+        return x;
+    }
 
-    double getY() const;
+    inline double Y() const {
+        return y;
+    }
 
-    void show() const;
+    inline void show() const {
+        printf("point(%.4lf, %.4lf)", x, y);
+    }
+
+    double getDistanceTo(point p2) const;
+
+    inline double getModule() const {
+        return sqrt(x*x+y*y);
+    }
+
+    inline void normalize() {
+        x /= getModule();
+        y /= getModule();
+    }
+
+    double dotProduct(point p2) const;
+
+    point cross(point x);
 };
 
+class circle;
 class line  {
 private:
     point p1;
     point p2;
 
 public:
+    friend class circle;
+
     line& operator=(const line& l1) = default;
 
     line() = default;
@@ -93,7 +126,6 @@ public:
     double funcY(double X) const;
 
     double funcX(double Y) const;
-
 };
 
 class circle {
@@ -108,11 +140,18 @@ public:
 
     circle(point _o, double _r) : o(move(_o)), r(_r) {}
 
-    void setCircle(point _o, double _r);
+    inline void setCircle(point _o, double _r) {
+        o = _o;
+        r = _r;
+    }
 
-    point getO();
+    inline point O() {
+        return o;
+    }
 
-    double getR() const;
+    inline double R() const {
+        return r;
+    }
 };
 
 class rectangle {
@@ -125,9 +164,11 @@ vector<point> linesIntersection(line l1, line l2);
 
 vector<point> lineCircleIntersection(line l1, circle c1);
 
+void show(vector<point> pointVec);
+
 /******************************************************************/
 inline double mult(point a, point b, point c) {
-    return (a.getX()-c.getX())*(b.getY()-c.getY()) - (b.getX()-c.getX())*(a.getY()-c.getY());
+    return (a.X()-c.X())*(b.Y()-c.Y()) - (b.X()-c.X())*(a.Y()-c.Y());
 }
 
 inline bool straightLine(line& l1, line& l2) {
@@ -148,5 +189,7 @@ inline double func2Y(line l1, line l2) {
     auto a = (l1.Y1()-l1.Y2())/(l1.X1()-l1.X2()) - (l2.Y1()-l2.Y2())/(l2.X1()-l2.X2());
     return b/a;
 }
+
+
 /******************************************************************/
 #endif //ROBOCLASS_TASK2_H
