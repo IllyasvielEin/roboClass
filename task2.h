@@ -90,13 +90,9 @@ public:
         return {p1, p2};
     }
 
-    inline double funcY(double X) const {
-        if ( !verticalX() ) {
-            return X * (Y1()-Y2()) / (X1()-X2()) - (Y1()-Y2()) * X2() / (X1()-X2()) + Y2();
-        } else {
-            return -11451;
-        }
-    }
+    double funcY(double X) const;
+
+    double funcX(double Y) const;
 
 };
 
@@ -127,7 +123,7 @@ private:
 /******************************************************************/
 vector<point> linesIntersection(line l1, line l2);
 
-
+vector<point> lineCircleIntersection(line l1, circle c1);
 
 /******************************************************************/
 inline double mult(point a, point b, point c) {
@@ -147,7 +143,7 @@ inline bool equalDouble(double d1, double d2) {
     return abs(d1-d2) < 0.001;
 }
 
-inline double func2X(line l1, line l2) {
+inline double func2Y(line l1, line l2) {
     auto b = l1.X2()*(l1.Y1()-l1.Y2())/(l1.X1()-l1.X2()) - l2.X2()*(l2.Y1()-l1.Y2())/(l2.X1()-l2.X2()) + l2.Y2() - l1.Y2();
     auto a = (l1.Y1()-l1.Y2())/(l1.X1()-l1.X2()) - (l2.Y1()-l2.Y2())/(l2.X1()-l2.X2());
     return b/a;

@@ -22,7 +22,7 @@ double point::getY() const {
 }
 
 void point::show() const {
-    printf("point(%.1lf, %.1lf)", x, y);
+    printf("point(%.4lf, %.4lf)", x, y);
 }
 
 /******************************************************************/
@@ -35,8 +35,23 @@ void line::setLine(const point& _p1, const point& _p2) {
 vector<point> line::getLine() {
     return vector<point>{p1, p2};
 }
-/******************************************************************/
 
+double line::funcY(double X) const {
+    if ( !verticalX() ) {
+        return X * (Y1()-Y2()) / (X1()-X2()) - (Y1()-Y2()) * X2() / (X1()-X2()) + Y2();
+    } else {
+        return -11451;
+    }
+}
+
+double line::funcX(double Y) const {
+    if ( !verticalX() ) {
+        return (Y -Y2())/ ((Y1()-Y2())/(X1()-X2())) + X2()  ;
+    } else {
+        return -11451;
+    }
+}
+/******************************************************************/
 void circle::setCircle(point _o, double _r) {
     o = _o;
     r = _r;
@@ -68,10 +83,15 @@ vector<point> linesIntersection(line l1, line l2) {
             return {point(l2.X1(),l1.funcY(l2.X1()))};
         }
         else {
-            return {};
+            return {point(l1.funcX(func2Y(l1,l2)),func2Y(l1,l2))};
         }
     }
     else {
         return {};
     }
+}
+
+vector<point> lineCircleIntersection(line l1, circle c1) {
+
+    return {};
 }
