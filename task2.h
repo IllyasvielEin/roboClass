@@ -46,23 +46,25 @@ public:
     }
 
     inline void show() const {
-        printf("point(%.4lf, %.4lf)", x, y);
+        printf("point(%lf, %lf)", x, y);
     }
 
     double getDistanceTo(point p2) const;
 
     inline double getModule() const {
-        return sqrt(x*x+y*y);
+        return ( sqrt(x*x+y*y) );
     }
 
     inline void normalize() {
-        x /= getModule();
-        y /= getModule();
+        if ( getModule() > 0.001 ) {
+            x *= 1/getModule();
+            y *= 1/getModule();
+        }
     }
 
     double dotProduct(point p2) const;
 
-    point cross(point x);
+    point cross(point p1p2) const;
 };
 
 class circle;

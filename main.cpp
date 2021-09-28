@@ -14,7 +14,7 @@ int main() {
 //        cout << "Empty." << endl;
 //    }
 
-    line l1(1,1.5,2,0);
+    line l1(1.5,1.5,3,0);
     circle c1(point(1,1), 1);
 
     auto pointVec = lineCircleIntersection(l1,c1);

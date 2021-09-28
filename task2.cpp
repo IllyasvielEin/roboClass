@@ -14,7 +14,7 @@ void point::setPoint(double _x, double _y) {
 }
 
 double point::getDistanceTo(point p2) const {
-    return sqrt((x-p2.x)*(x-p2.x) + (y-p2.y)*(y-p2.y));
+    return sqrt(abs(x-p2.x)*abs(x-p2.x) + abs(y-p2.y)*abs(y-p2.y));
 }
 
 point &point::operator-(const point& p1) {
@@ -39,11 +39,11 @@ point &point::operator+(const point& p1) {
     return *this;
 }
 
-point point::cross(point p2) {
-    auto e = *this; e.normalize();
-    auto p1pr = dotProduct(p2) / p2.getModule();
-    auto pr = e * p1pr;
-    return pr;
+point point::cross(point p1p2) const {
+    auto e = p1p2; e.normalize();
+    auto p1DistancePr = dotProduct(p1p2) / p1p2.getModule();
+    auto p1pr = e * p1DistancePr;
+    return p1pr;
 }
 
 /******************************************************************/
@@ -113,6 +113,7 @@ int atCircle(line l1, circle c1, point& tmp) {
             tmp = p;
             edge++;
         } else {
+            tmp = p;
             outsider++;
         }
     }
@@ -135,16 +136,19 @@ int atCircle(line l1, circle c1, point& tmp) {
     }
 }
 
-vector<point> straightCircleUni(line l1, circle c1, point tmp) {
+vector<point> straightCircleUni(line l1, circle c1, point& tmp) {
     auto p1 = l1.getPoint()[0];
     auto p2 = l1.getPoint()[1];
     auto p1p2 = p2 - p1;
     auto p1o = c1.O() - p1;
     auto e = p1p2; e.normalize();
-    auto pr = p1 + p1o.cross(p1p2);
+    auto p1pr = p1o.cross(p1p2);
+    auto pr = p1 + p1pr;
     auto ODistancePr = pr.getDistanceTo(c1.O());
-    auto v1 = pr + e*sqrt(c1.R()*c1.R()-ODistancePr*ODistancePr);
-    auto v2 = pr - e*sqrt(c1.R()*c1.R()-ODistancePr*ODistancePr);
+    auto half = sqrt(c1.R() * c1.R() - ODistancePr * ODistancePr);
+    auto v1 = pr + e * half;
+    auto v2 = pr - e * half;
+
     if ( v1.getDistanceTo(tmp) < v2.getDistanceTo(tmp) ) {
         return {v1};
     } else {
