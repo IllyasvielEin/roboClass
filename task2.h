@@ -128,6 +128,12 @@ public:
     double funcY(double X) const;
 
     double funcX(double Y) const;
+
+    inline void show() {
+        getPoint()[0].show();
+        printf("to ");
+        getPoint()[1].show();
+    }
 };
 
 class circle {
@@ -158,7 +164,22 @@ public:
 
 class rectangle {
 private:
-    vector<point> point;
+    vector<point> points;
+
+public:
+    rectangle& operator=(const rectangle& ra1) = default;
+
+    rectangle() = default;
+
+    rectangle(initializer_list<point> il1) : points(il1) {};
+
+    explicit rectangle(vector<point> v1) : points(move(v1)) {};
+
+    rectangle(const rectangle& ra1);
+
+    rectangle(rectangle&& ra1) noexcept;
+
+    vector<line> getline();
 };
 
 /******************************************************************/
@@ -166,8 +187,9 @@ vector<point> linesIntersection(line l1, line l2);
 
 vector<point> lineCircleIntersection(line l1, circle c1);
 
-void show(vector<point> pointVec);
+vector<point> lineRectangleIntersection(line l1, rectangle ra1);
 
+void show(vector<point> pointVec);
 /******************************************************************/
 inline double mult(point a, point b, point c) {
     return (a.X()-c.X())*(b.Y()-c.Y()) - (b.X()-c.X())*(a.Y()-c.Y());
@@ -191,7 +213,5 @@ inline double func2Y(line l1, line l2) {
     auto a = (l1.Y1()-l1.Y2())/(l1.X1()-l1.X2()) - (l2.Y1()-l2.Y2())/(l2.X1()-l2.X2());
     return b/a;
 }
-
-
 /******************************************************************/
 #endif //ROBOCLASS_TASK2_H

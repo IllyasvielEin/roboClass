@@ -14,12 +14,13 @@ int main() {
 //        cout << "Empty." << endl;
 //    }
 
-    line l1(3,0,0,3);
-    circle c1(point(1,1), 1);
-    auto pointVec = lineCircleIntersection(l1,c1);
-    printf("the intersections is as followed:");
-    show(pointVec);
+//    line l1(3,0,0,3);
+//    circle c1(point(1,1), 1);
+//    auto pointVec = lineCircleIntersection(l1,c1);
+//    printf("the intersections is as followed: ");
+//    show(pointVec);
 
+    rectangle ra1({point(1,3), point(4,3), point(4,1), point(1,1)});
 
     return 0;
 }

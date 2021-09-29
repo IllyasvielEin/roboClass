@@ -50,7 +50,6 @@ point point::operator*(const double &q) {
 }
 
 /******************************************************************/
-
 void line::setLine(const point& _p1, const point& _p2) {
     p1 = _p1;
     p2 = _p2;
@@ -75,9 +74,6 @@ double line::funcX(double Y) const {
         return -11451;
     }
 }
-/******************************************************************/
-
-
 /******************************************************************/
 vector<point> linesIntersection(line l1, line l2) {
     /* y = ax + b */
@@ -178,7 +174,6 @@ vector<point> interCircle(line l1, circle c1) {
     return {v1, v2};
 }
 
-
 vector<point> lineCircleIntersection(line l1, circle c1) {
     point tmp{};
     switch (atCircle(l1,c1,tmp)) {
@@ -196,7 +191,6 @@ vector<point> lineCircleIntersection(line l1, circle c1) {
     }
 }
 
-/******************************************************************/
 void show(vector<point> pointVec)
 {
     if ( !pointVec.empty() ) {
@@ -208,5 +202,29 @@ void show(vector<point> pointVec)
         cout << "Empty." << endl;
     }
 }
-
 /******************************************************************/
+rectangle::rectangle(const rectangle& ra1) {
+    points = ra1.points;
+}
+
+rectangle::rectangle(rectangle&& ra1)  noexcept {
+    points = ra1.points;
+}
+
+vector<point> lineRectangleIntersection(line l1, rectangle ra1) {
+
+}
+
+vector<line> rectangle::getline() {
+    vector<line> ans;
+    ans.reserve(4);
+    for (int i = 0; i < 4; ++i) {
+        auto next = i+1;
+        if ( next==4 )
+        {
+            next == 0;
+        }
+        ans.emplace_back(points[i], points[next]);
+    }
+}
+
