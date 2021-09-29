@@ -14,10 +14,10 @@ int main() {
 //        cout << "Empty." << endl;
 //    }
 
-    line l1(1.5,1.5,3,0);
+    line l1(3,0,0,3);
     circle c1(point(1,1), 1);
-
     auto pointVec = lineCircleIntersection(l1,c1);
+    printf("the intersections is as followed:");
     show(pointVec);
 
 

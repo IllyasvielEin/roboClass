@@ -17,26 +17,8 @@ double point::getDistanceTo(point p2) const {
     return sqrt(abs(x-p2.x)*abs(x-p2.x) + abs(y-p2.y)*abs(y-p2.y));
 }
 
-point &point::operator-(const point& p1) {
-    x -= p1.x;
-    y -= p1.y;
-    return *this;
-}
-
 double point::dotProduct(point p2) const {
     return x*p2.x+y*p2.y;
-}
-
-point &point::operator*(double q) {
-    x *= q;
-    y *= q;
-    return *this;
-}
-
-point &point::operator+(const point& p1) {
-    x += p1.x;
-    y += p1.y;
-    return *this;
 }
 
 point point::cross(point p1p2) const {
@@ -44,6 +26,27 @@ point point::cross(point p1p2) const {
     auto p1DistancePr = dotProduct(p1p2) / p1p2.getModule();
     auto p1pr = e * p1DistancePr;
     return p1pr;
+}
+
+point point::operator+(const point &p1) {
+    auto tmp = *this;
+    tmp.x += p1.x;
+    tmp.y += p1.y;
+    return tmp;
+}
+
+point point::operator-(const point &p1) {
+    auto tmp = *this;
+    tmp.x -= p1.x;
+    tmp.y -= p1.y;
+    return tmp;
+}
+
+point point::operator*(const double &q) {
+    auto tmp = *this;
+    tmp.x *= q;
+    tmp.y *= q;
+    return tmp;
 }
 
 /******************************************************************/
@@ -108,23 +111,26 @@ int atCircle(line l1, circle c1, point& tmp) {
     int edge = 0;
     for ( auto p : l1.getPoint() ) {
         if ( p.getDistanceTo(c1.O())<c1.R() ) {
+            p.show();
+            printf("is inside.\n");
             insider++;
         } else if ( equalDouble(p.getDistanceTo(c1.O()),c1.R()) ) {
             tmp = p;
+            p.show();
+            printf("is at the edge.\n");
             edge++;
         } else {
             tmp = p;
+            p.show();
+            printf("is outside.\n");
             outsider++;
         }
     }
     if ( insider == 2 ) {
-        cout << "inside\n";
         return 1;
     } else if ( outsider == 2 ) {
-        cout << "outside\n";
         return 2;
     } else if ( insider==1&&outsider==1){
-        cout << "str\n";
         return 3;
     } else if ( edge == 1 ){
         return 4;
@@ -141,14 +147,14 @@ vector<point> straightCircleUni(line l1, circle c1, point& tmp) {
     auto p2 = l1.getPoint()[1];
     auto p1p2 = p2 - p1;
     auto p1o = c1.O() - p1;
-    auto e = p1p2; e.normalize();
     auto p1pr = p1o.cross(p1p2);
     auto pr = p1 + p1pr;
+    auto e = p1p2;
+    e.normalize();
     auto ODistancePr = pr.getDistanceTo(c1.O());
-    auto half = sqrt(c1.R() * c1.R() - ODistancePr * ODistancePr);
+    auto half = sqrt(pow(c1.R(), 2) - pow(ODistancePr,2));
     auto v1 = pr + e * half;
     auto v2 = pr - e * half;
-
     if ( v1.getDistanceTo(tmp) < v2.getDistanceTo(tmp) ) {
         return {v1};
     } else {
@@ -157,7 +163,19 @@ vector<point> straightCircleUni(line l1, circle c1, point& tmp) {
 }
 
 vector<point> interCircle(line l1, circle c1) {
-
+    auto p1 = l1.getPoint()[0];
+    auto p2 = l1.getPoint()[1];
+    auto p1p2 = p2 - p1;
+    auto p1o = c1.O() - p1;
+    auto p1pr = p1o.cross(p1p2);
+    auto pr = p1 + p1pr;
+    auto e = p1p2;
+    e.normalize();
+    auto ODistancePr = pr.getDistanceTo(c1.O());
+    auto half = sqrt(pow(c1.R(), 2) - pow(ODistancePr,2));
+    auto v1 = pr + e * half;
+    auto v2 = pr - e * half;
+    return {v1, v2};
 }
 
 

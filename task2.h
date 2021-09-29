@@ -19,13 +19,11 @@ public:
 
     point& operator=(const point& p1) = default;
 
-    point& operator+(const point& p1);
+    point operator+(const point& p1);
 
-    point& operator-(const point& p1);
+    point operator-(const point& p1);
 
-    point& operator*(double q);
-
-
+    point operator*(const double& q);
 
     point() = default;
 
@@ -45,8 +43,9 @@ public:
         return y;
     }
 
-    inline void show() const {
-        printf("point(%lf, %lf)", x, y);
+    inline string show() const {
+        printf("point(%lf, %lf) ", x, y);
+        return {"point("+to_string(x)+" ,"+to_string(y)+")"};
     }
 
     double getDistanceTo(point p2) const;
@@ -57,8 +56,9 @@ public:
 
     inline void normalize() {
         if ( getModule() > 0.001 ) {
-            x *= 1/getModule();
-            y *= 1/getModule();
+            auto module = getModule();
+            x /= module;
+            y /= module;
         }
     }
 
