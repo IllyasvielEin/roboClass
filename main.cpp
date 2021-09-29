@@ -21,6 +21,9 @@ int main() {
 //    show(pointVec);
 
     rectangle ra1({point(1,3), point(4,3), point(4,1), point(1,1)});
+    line l1(2,3.5,5.5,0);
+    auto ans = lineRectangleIntersection(l1, ra1);
+    show(ans);
 
     return 0;
 }

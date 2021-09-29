@@ -7,6 +7,7 @@
 #include <utility>
 #include <vector>
 #include <cmath>
+#include <algorithm>
 using namespace std;
 
 class point {
@@ -133,6 +134,7 @@ public:
         getPoint()[0].show();
         printf("to ");
         getPoint()[1].show();
+        cout << endl;
     }
 };
 
@@ -180,6 +182,18 @@ public:
     rectangle(rectangle&& ra1) noexcept;
 
     vector<line> getline();
+
+    inline vector<point> getPoints()  {
+        return points;
+    }
+
+    double getMaxX();
+
+    double getMinX();
+
+    double getMaxY();
+
+    double getMinY();
 };
 
 /******************************************************************/
@@ -189,7 +203,9 @@ vector<point> lineCircleIntersection(line l1, circle c1);
 
 vector<point> lineRectangleIntersection(line l1, rectangle ra1);
 
-void show(vector<point> pointVec);
+void show(const vector<point>& pointVec);
+
+bool withRectangle(point p1, rectangle ra1);
 /******************************************************************/
 inline double mult(point a, point b, point c) {
     return (a.X()-c.X())*(b.Y()-c.Y()) - (b.X()-c.X())*(a.Y()-c.Y());
@@ -208,10 +224,10 @@ inline bool equalDouble(double d1, double d2) {
     return abs(d1-d2) < 0.001;
 }
 
-inline double func2Y(line l1, line l2) {
-    auto b = l1.X2()*(l1.Y1()-l1.Y2())/(l1.X1()-l1.X2()) - l2.X2()*(l2.Y1()-l1.Y2())/(l2.X1()-l2.X2()) + l2.Y2() - l1.Y2();
-    auto a = (l1.Y1()-l1.Y2())/(l1.X1()-l1.X2()) - (l2.Y1()-l2.Y2())/(l2.X1()-l2.X2());
-    return b/a;
+inline double func2X(line l1, line l2) {
+    auto a1 = (l1.Y1()-l1.Y2())/(l1.X1()-l1.X2());
+    auto a2 = (l2.Y1()-l2.Y2())/(l2.X1()-l2.X2());
+    return ( a1*l1.X2() - a2*l2.X2() - l1.Y2() + l2.Y2() ) / (a1-a2);
 }
 /******************************************************************/
 #endif //ROBOCLASS_TASK2_H

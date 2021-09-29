@@ -68,8 +68,10 @@ double line::funcY(double X) const {
 }
 
 double line::funcX(double Y) const {
+    auto a = (Y1()-Y2()) / ( X1()-X2() );
     if ( !verticalX() ) {
-        return (Y -Y2())/ ((Y1()-Y2())/(X1()-X2())) + X2()  ;
+        cout << a << endl;
+        return (Y-Y2()+ a*X2() ) / a ;
     } else {
         return -11451;
     }
@@ -93,7 +95,7 @@ vector<point> linesIntersection(line l1, line l2) {
             return {point(l2.X1(),l1.funcY(l2.X1()))};
         }
         else {
-            return {point(l1.funcX(func2Y(l1,l2)),func2Y(l1,l2))};
+            return {point(func2X(l1,l2), l1.funcY(func2X(l1,l2)))};
         }
     }
     else {
@@ -191,7 +193,7 @@ vector<point> lineCircleIntersection(line l1, circle c1) {
     }
 }
 
-void show(vector<point> pointVec)
+void show(const vector<point>& pointVec)
 {
     if ( !pointVec.empty() ) {
         for ( auto p : pointVec ) {
@@ -212,7 +214,17 @@ rectangle::rectangle(rectangle&& ra1)  noexcept {
 }
 
 vector<point> lineRectangleIntersection(line l1, rectangle ra1) {
-
+    withRectangle(l1.getPoint()[0], ra1);
+    withRectangle(l1.getPoint()[1], ra1);
+    vector<point> ans;
+    auto lineVec = ra1.getline();
+    for ( auto l : lineVec ) {
+        auto tmp = linesIntersection(l, l1);
+        if ( !tmp.empty() ) {
+            ans.push_back( tmp[0] );
+        }
+    }
+    return ans;
 }
 
 vector<line> rectangle::getline() {
@@ -220,11 +232,87 @@ vector<line> rectangle::getline() {
     ans.reserve(4);
     for (int i = 0; i < 4; ++i) {
         auto next = i+1;
-        if ( next==4 )
+        if ( i==3 )
         {
-            next == 0;
+            next = 0;
         }
-        ans.emplace_back(points[i], points[next]);
+        ans.emplace_back(points[i], points[next] );
+    }
+//    for ( auto l : ans ) {
+//        l.show();
+//    }
+    return ans;
+}
+
+double rectangle::getMaxX() {
+    auto max = -1.0;
+    for ( auto p : points ) {
+        if ( p.X()>max ) {
+            max = p.X();
+        }
+    }
+    return max;
+}
+
+double rectangle::getMinX() {
+    auto min = 999.0;
+    for ( auto p : points ) {
+        if ( p.X()<min ) {
+            min = p.X();
+        }
+    }
+    return min;
+}
+
+double rectangle::getMaxY() {
+    auto max = -1.0;
+    for ( auto p : points ) {
+        if ( p.Y()>max ) {
+            max = p.Y();
+        }
+    }
+    return max;
+}
+
+double rectangle::getMinY() {
+    auto min = 999.0;
+    for ( auto p : points ) {
+        if ( p.Y()<min ) {
+            min = p.Y();
+        }
+    }
+    return min;
+}
+
+bool samePoint(point p1, point p2) {
+    if (equalDouble(p1.X(), p2.X()) && equalDouble(p1.Y(), p2.Y())) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool atRectangle(point p1, rectangle ra1) {
+    bool flag = false;
+    any_of(ra1.getPoints().begin(), ra1.getPoints().end(), [&flag,p1](point p) {
+        flag = true;
+        return p.X()==p1.X()&&p.Y()==p1.Y();
+    });
+    return flag;
+}
+
+bool withRectangle(point p1, rectangle ra1) {
+    if ( p1.X()>ra1.getMinX()&&p1.X()<ra1.getMaxX()&&p1.Y()>ra1.getMinY()&&p1.Y()<ra1.getMaxY()) {
+        p1.show();
+        printf("is in rectangle\n");
+        return true;
+    } else if (atRectangle(p1, ra1)) {
+        p1.show();
+        printf("is at the edge of rectangle\n");
+    } else {
+        p1.show();
+        printf("is not in rectangle\n");
+        return false;
     }
 }
 
